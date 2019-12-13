@@ -4,7 +4,7 @@ Greeklish Token Filter for ElasticSearch
 The Greeklish plugin generates tokens with latin characters from greek tokens.
 
 The generated tokens have the save position and the same offset with the
-original greek tokens.  
+original greek tokens.
 A detailed example of how to use this plugin you can be found
  [in the wiki](https://github.com/skroutz/elasticsearch-analysis-greeklish/wiki/A-full-example-of-a-greeklish-text-pipeline)
 
@@ -13,6 +13,7 @@ Versions
 
 Greeklish Plugin | ElasticSearch | Branch |
 -----------------|---------------|--------|
+7.5.0          | 7.5.0         | 7.5.0  |
 5.4.2.1          | 5.4.2         | 5.4.2  |
 5.4.0.1          | 5.4.0         | 5.4.0  |
 2.4.4.1          | 2.4.4         | 2.4.4  |
@@ -23,26 +24,19 @@ Greeklish Plugin | ElasticSearch | Branch |
 
 Installation
 -------------
+Build the plugin
+```bash
+sudo apt-get install maven
 
-To list all plugins in current installation:
+cd elasticsearch-analysis-greeklish
 
-    sudo bin/elasticsearch-plugin list
+mvn package
+```
 
-In order to install the latest version of the plugin, simply run:
-
-    sudo bin/elasticsearch-plugin install gr.skroutz:elasticsearch-analysis-greeklish:5.4.2.1
-
-In order to install version 2.4.4 of the plugin, simply run:
-
-    sudo bin/plugin install gr.skroutz/elasticsearch-analysis-greeklish/2.4.4.1
-
-In order to install the plugin for versions prior to 1.5.x, run:
-
-    sudo bin/plugin -install gr.skroutz/elasticsearch-analysis-greeklish/0.10
-
-To remove a plugin (5.x.x):
-
-    sudo bin/elasticsearch-plugin remove <plugin_name>
+Installation
+```bash
+sudo bin/elasticsearch-plugin install file:///path/to/plugin.zip
+```
 
 Expansions
 ----------

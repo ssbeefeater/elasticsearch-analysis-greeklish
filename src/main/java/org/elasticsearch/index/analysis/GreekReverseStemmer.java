@@ -6,24 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.ESLoggerFactory;
+import org.elasticsearch.common.logging.Loggers;
 
 /**
- * @author Tasos Stathopoulos
- * Generates singular/plural variants of a greek word based
- * on a combination of predefined rules.
+ * @author Tasos Stathopoulos Generates singular/plural variants of a greek word
+ *         based on a combination of predefined rules.
  */
 public class GreekReverseStemmer {
 
 	/**
 	 * Elastic Search logger
 	 */
-	private static final Logger logger = ESLoggerFactory.getLogger(
-			GreeklishConverter.class.getName());
+	private static final Logger logger = Loggers.getLogger(Logger.class, GreeklishConverter.class.getName());
 
 	/**
-	 * Constant variable that represent suffixes for pluralization of
-	 * greeklish tokens.
+	 * Constant variable that represent suffixes for pluralization of greeklish
+	 * tokens.
 	 */
 	private static final String SUFFIX_MATOS = "ματοσ";
 	private static final String SUFFIX_MATA = "ματα";
@@ -49,37 +47,37 @@ public class GreekReverseStemmer {
 	private static final String SUFFIX_I = "ι";
 
 	/**
-	 * This hash has as keys all the suffixes that we want to handle in order
-	 * to generate singular/plural greek words.
+	 * This hash has as keys all the suffixes that we want to handle in order to
+	 * generate singular/plural greek words.
 	 */
 	private final Map<String, String[]> suffixes = new HashMap<String, String[]>();
 
 	/**
 	 * The possible suffix strings.
 	 */
-	private static final String[][] suffixStrings = new String[][] {
-		{SUFFIX_MATOS, "μα", "ματων", "ματα"},  // κουρεματος, ασυρματος
-		{SUFFIX_MATA, "μα", "ματων", "ματοσ"},  // ενδυματα
-		{SUFFIX_MATWN, "μα", "ματα", "ματοσ"},  // ασυρματων, ενδυματων
-		{SUFFIX_AS, "α", "ων", "εσ"},  // πορτας, χαρτοφυλακας
-		{SUFFIX_EIA, "ειο", "ειων", "ειου", "ειασ"},  // γραφεια, ενεργεια
-		{SUFFIX_EIO, "εια", "ειων", "ειου"},  // γραφειο
-		{SUFFIX_EIOY, "εια", "ειου", "ειο", "ειων"},  // γραφειου
-		{SUFFIX_EIWN, "εια", "ειου", "ειο", "ειασ"},  // ασφαλειων, γραφειων
-		{SUFFIX_IOY, "ι", "ια", "ιων", "ιο"},  // πεδιου, κυνηγιου
-		{SUFFIX_IA, "ιου", "ι", "ιων", "ιασ", "ιο"},  // πεδία, αρμονια
-		{SUFFIX_IWN, "ιου", "ια", "ι", "ιο"},  // καλωδιων, κατοικιδιων
-		{SUFFIX_OS, "η", "ουσ", "ου", "οι", "ων"},  // κλιματισμος
-		{SUFFIX_OI, "οσ", "ου", "ων"},  // μυλοι, οδηγοι, σταθμοι
-		{SUFFIX_EIS, "η", "ησ", "εων"},  // συνδεσεις, τηλεορασεις
-		{SUFFIX_ES, "η", "ασ", "ων", "ησ", "α"},  // αλυσιδες
-		{SUFFIX_HS, "ων", "εσ", "η", "εων"},  // γυμναστικης, εκτυπωσης
-		{SUFFIX_WN, "οσ", "εσ", "α", "η", "ησ", "ου", "οι", "ο", "α"},  //  ινων, καπνιστων, καρτων, κατασκευων
-		{SUFFIX_OY, "ων", "α", "ο", "οσ"},  // λαδιου, μοντελισμου, παιδικου
-		{SUFFIX_O, "α", "ου", "εων", "ων"},  // αυτοκινητο, δισκος
-		{SUFFIX_H, "οσ", "ουσ", "εων", "εισ", "ησ", "ων"},  //βελη, ψυξη, τηλεοραση, αποτριχωση
-		{SUFFIX_A, "ο" , "ου", "ων", "ασ", "εσ"},  // γιλεκα, εσωρουχα, ομπρελλα
-		{SUFFIX_I, "ιου", "ια", "ιων"}  // γιαουρτι, γραναζι
+	private static final String[][] suffixStrings = new String[][] { { SUFFIX_MATOS, "μα", "ματων", "ματα" }, // κουρεματος,
+																												// ασυρματος
+			{ SUFFIX_MATA, "μα", "ματων", "ματοσ" }, // ενδυματα
+			{ SUFFIX_MATWN, "μα", "ματα", "ματοσ" }, // ασυρματων, ενδυματων
+			{ SUFFIX_AS, "α", "ων", "εσ" }, // πορτας, χαρτοφυλακας
+			{ SUFFIX_EIA, "ειο", "ειων", "ειου", "ειασ" }, // γραφεια, ενεργεια
+			{ SUFFIX_EIO, "εια", "ειων", "ειου" }, // γραφειο
+			{ SUFFIX_EIOY, "εια", "ειου", "ειο", "ειων" }, // γραφειου
+			{ SUFFIX_EIWN, "εια", "ειου", "ειο", "ειασ" }, // ασφαλειων, γραφειων
+			{ SUFFIX_IOY, "ι", "ια", "ιων", "ιο" }, // πεδιου, κυνηγιου
+			{ SUFFIX_IA, "ιου", "ι", "ιων", "ιασ", "ιο" }, // πεδία, αρμονια
+			{ SUFFIX_IWN, "ιου", "ια", "ι", "ιο" }, // καλωδιων, κατοικιδιων
+			{ SUFFIX_OS, "η", "ουσ", "ου", "οι", "ων" }, // κλιματισμος
+			{ SUFFIX_OI, "οσ", "ου", "ων" }, // μυλοι, οδηγοι, σταθμοι
+			{ SUFFIX_EIS, "η", "ησ", "εων" }, // συνδεσεις, τηλεορασεις
+			{ SUFFIX_ES, "η", "ασ", "ων", "ησ", "α" }, // αλυσιδες
+			{ SUFFIX_HS, "ων", "εσ", "η", "εων" }, // γυμναστικης, εκτυπωσης
+			{ SUFFIX_WN, "οσ", "εσ", "α", "η", "ησ", "ου", "οι", "ο", "α" }, // ινων, καπνιστων, καρτων, κατασκευων
+			{ SUFFIX_OY, "ων", "α", "ο", "οσ" }, // λαδιου, μοντελισμου, παιδικου
+			{ SUFFIX_O, "α", "ου", "εων", "ων" }, // αυτοκινητο, δισκος
+			{ SUFFIX_H, "οσ", "ουσ", "εων", "εισ", "ησ", "ων" }, // βελη, ψυξη, τηλεοραση, αποτριχωση
+			{ SUFFIX_A, "ο", "ου", "ων", "ασ", "εσ" }, // γιλεκα, εσωρουχα, ομπρελλα
+			{ SUFFIX_I, "ιου", "ια", "ιων" } // γιαουρτι, γραναζι
 	};
 
 	/**
@@ -97,8 +95,7 @@ public class GreekReverseStemmer {
 	}
 
 	/**
-	 * This method generates the greek variants of the greek token that
-	 * receives.
+	 * This method generates the greek variants of the greek token that receives.
 	 *
 	 * @param tokenString the greek word
 	 * @return a list of the generated greek word variations
@@ -124,6 +121,7 @@ public class GreekReverseStemmer {
 
 	/**
 	 * Generates more greek words based on the suffix of the original word
+	 *
 	 * @param inputSuffix the suffix that matched
 	 */
 	private void generate_more_greek_words(final String inputToken, final String inputSuffix) {

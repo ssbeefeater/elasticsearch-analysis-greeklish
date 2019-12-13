@@ -5,28 +5,25 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.ESLoggerFactory;
-
+import org.elasticsearch.common.logging.Loggers;
 
 /**
- * @author Tasos Stathopoulos Generates singular/plural variants of greek
- * 		   tokens and converts them to tokens with latin characters from which are
- * 		   matched to the corresponding greek characters.
- * 		   A Greek character may have one or more latin counterparts. So,
- * 		   from a Greek token one or more latin tokens are
- *         generated. Greek words have combination of vowels called
- *         digraphs. Because digraphs are special cases, they are treated separately.
+ * @author Tasos Stathopoulos Generates singular/plural variants of greek tokens
+ *         and converts them to tokens with latin characters from which are
+ *         matched to the corresponding greek characters. A Greek character may
+ *         have one or more latin counterparts. So, from a Greek token one or
+ *         more latin tokens are generated. Greek words have combination of
+ *         vowels called digraphs. Because digraphs are special cases, they are
+ *         treated separately.
  */
 public class GreeklishConverter {
 	/**
 	 * Elastic Search logger
 	 */
-    private static final Logger logger = ESLoggerFactory.getLogger(
-            GreeklishConverter.class.getName());
+	private static final Logger logger = Loggers.getLogger(Logger.class, GreeklishConverter.class.getName());
 
 	/**
-	 * Tokens that contain only these characters will be affected by this
-	 * filter.
+	 * Tokens that contain only these characters will be affected by this filter.
 	 */
 	public static final String GREEK_CHARACTERS = "αβγδεζηθικλμνξοπρστυφχψω";
 
@@ -41,20 +38,20 @@ public class GreeklishConverter {
 	private String tokenString;
 
 	/**
-	 * Instance of the reverse stemmer that generates the word variants
-	 * of the greek token.
+	 * Instance of the reverse stemmer that generates the word variants of the greek
+	 * token.
 	 */
 	private final GreekReverseStemmer reverseStemmer;
 
 	/**
-	 * Instance of the greeklish generator that generates the greeklish
-	 * words from the words that are returned by the greek reverse stemmer.
+	 * Instance of the greeklish generator that generates the greeklish words from
+	 * the words that are returned by the greek reverse stemmer.
 	 */
 	private final GreeklishGenerator greeklishGenerator;
 
 	/**
-	 * Setting that which is set in the configuration file that defines
-	 * whether the user wants to generate greek variants.
+	 * Setting that which is set in the configuration file that defines whether the
+	 * user wants to generate greek variants.
 	 */
 	private final boolean generateGreekVariants;
 
@@ -79,10 +76,8 @@ public class GreeklishConverter {
 	/**
 	 * The actual conversion is happening here.
 	 *
-	 * @param inputToken
-	 *            the Greek token
-	 * @param tokenLength
-	 *            the length of the input token
+	 * @param inputToken  the Greek token
+	 * @param tokenLength the length of the input token
 	 * @return A list of the generated strings
 	 */
 	public final List<StringBuilder> convert(char[] inputToken, int tokenLength) {
@@ -113,8 +108,7 @@ public class GreeklishConverter {
 	/**
 	 * Identifies words with only Greek lowercase characters.
 	 *
-	 * @param input
-	 *            The string that will examine
+	 * @param input The string that will examine
 	 * @return true if the string contains only Greek characters
 	 */
 	private boolean identifyGreekWord(String input) {

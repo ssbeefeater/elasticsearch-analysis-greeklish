@@ -8,24 +8,21 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.ESLoggerFactory;
+import org.elasticsearch.common.logging.Loggers;
 
 /**
- * @author Tasos Stathopoulos
- * Generates greeklish tokens for each element of list
- * of greek tokens.
+ * @author Tasos Stathopoulos Generates greeklish tokens for each element of
+ *         list of greek tokens.
  */
 public class GreeklishGenerator {
 
 	/**
 	 * Elastic Search logger
 	 */
-	private static final Logger logger = ESLoggerFactory.getLogger(
-			GreeklishConverter.class.getName());
+	private static final Logger logger = Loggers.getLogger(Logger.class, GreeklishConverter.class.getName());
 
 	/**
-	 * Constant variables that represent the character that substitutes a
-	 * digraph.
+	 * Constant variables that represent the character that substitutes a digraph.
 	 */
 	private static final String AI = "Α";
 	private static final String EI = "Ε";
@@ -52,25 +49,18 @@ public class GreeklishGenerator {
 	/**
 	 * The possible digraph cases.
 	 */
-	private static final String[][] digraphCases = new String[][] {
-			{ "αι", AI }, { "ει", EI }, { "οι", OI }, { "ου", OY },
-			{ "ευ", EY }, { "αυ", AY }, { "μπ", MP }, { "γγ", GG },
-			{ "γκ", GK }, { "ντ", NT } };
+	private static final String[][] digraphCases = new String[][] { { "αι", AI }, { "ει", EI }, { "οι", OI },
+			{ "ου", OY }, { "ευ", EY }, { "αυ", AY }, { "μπ", MP }, { "γγ", GG }, { "γκ", GK }, { "ντ", NT } };
 	/**
 	 * The possible string conversions for each case.
 	 */
-	private static final String[][] convertStrings = new String[][] {
-			{ AI, "ai", "e" }, { EI, "ei", "i" }, { OI, "oi", "i" },
-			{ OY, "ou", "oy", "u" }, { EY, "eu", "ef", "ev", "ey" },
-			{ AY, "au", "af", "av", "ay" }, { MP, "mp", "b" },
-			{ GG, "gg", "g" }, { GK, "gk", "g" }, { NT, "nt", "d" },
-			{ "α", "a" }, { "β", "b", "v" }, { "γ", "g" }, { "δ", "d" },
-			{ "ε", "e" }, { "ζ", "z" }, { "η", "h", "i" }, { "θ", "th" },
-			{ "ι", "i" }, { "κ", "k" }, { "λ", "l" }, { "μ", "m" },
-			{ "ν", "n" }, { "ξ", "ks", "x" }, { "ο", "o" }, { "π", "p" },
-			{ "ρ", "r" }, { "σ", "s" }, { "τ", "t" }, { "υ", "y", "u", "i" },
-			{ "φ", "f", "ph" }, { "χ", "x", "h", "ch" }, { "ψ", "ps" },
-			{ "ω", "w", "o", "v" } };
+	private static final String[][] convertStrings = new String[][] { { AI, "ai", "e" }, { EI, "ei", "i" },
+			{ OI, "oi", "i" }, { OY, "ou", "oy", "u" }, { EY, "eu", "ef", "ev", "ey" }, { AY, "au", "af", "av", "ay" },
+			{ MP, "mp", "b" }, { GG, "gg", "g" }, { GK, "gk", "g" }, { NT, "nt", "d" }, { "α", "a" }, { "β", "b", "v" },
+			{ "γ", "g" }, { "δ", "d" }, { "ε", "e" }, { "ζ", "z" }, { "η", "h", "i" }, { "θ", "th" }, { "ι", "i" },
+			{ "κ", "k" }, { "λ", "l" }, { "μ", "m" }, { "ν", "n" }, { "ξ", "ks", "x" }, { "ο", "o" }, { "π", "p" },
+			{ "ρ", "r" }, { "σ", "s" }, { "τ", "t" }, { "υ", "y", "u", "i" }, { "φ", "f", "ph" },
+			{ "χ", "x", "h", "ch" }, { "ψ", "ps" }, { "ω", "w", "o", "v" } };
 
 	/**
 	 * The maximum greeklish expansions per greek token.
@@ -83,9 +73,8 @@ public class GreeklishGenerator {
 	private final List<StringBuilder> perWordGreeklish;
 
 	/**
-	 * Keep the generated strings in a list. The populated list is
-	 * returned to the filter.
-	 * CopyOnWriteArrayList is used because it is thread safe and has the
+	 * Keep the generated strings in a list. The populated list is returned to the
+	 * filter. CopyOnWriteArrayList is used because it is thread safe and has the
 	 * ability to add components while a thread iterates over its elements.
 	 */
 	private final List<StringBuilder> greeklishList;
@@ -96,8 +85,8 @@ public class GreeklishGenerator {
 	private char[] inputToken;
 
 	/**
-	 * Input token converted into String without substitutions.
-	 * It is used for logging the processing token.
+	 * Input token converted into String without substitutions. It is used for
+	 * logging the processing token.
 	 */
 	private String initialToken;
 
@@ -117,14 +106,13 @@ public class GreeklishGenerator {
 
 		// populate conversions
 		for (String[] convertString : convertStrings) {
-			conversions.put(convertString[0].charAt(0),
-					Arrays.copyOfRange(convertString, 1, convertString.length));
+			conversions.put(convertString[0].charAt(0), Arrays.copyOfRange(convertString, 1, convertString.length));
 		}
 	}
 
 	/**
-	 * Gets a list of greek words and generates the greeklish version of
-	 * each word.
+	 * Gets a list of greek words and generates the greeklish version of each word.
+	 *
 	 * @param greekWords a list of greek words
 	 * @return a list of greeklish words
 	 */
@@ -163,14 +151,12 @@ public class GreeklishGenerator {
 
 	/**
 	 * Add the matching latin characters to the generated greeklish tokens for a
-	 * specific Greek character. For each different combination of latin
-	 * characters, a new token is generated.
+	 * specific Greek character. For each different combination of latin characters,
+	 * a new token is generated.
 	 *
-	 * @param convertStrings
-	 *            The latin characters that will be added to the tokens
-	 * @param bufferSize
-	 *            The size of the buffer that will be allocated in case of new
-	 *            StringBuilder
+	 * @param convertStrings The latin characters that will be added to the tokens
+	 * @param bufferSize     The size of the buffer that will be allocated in case
+	 *                       of new StringBuilder
 	 */
 	private void addCharacter(String[] convertStrings, int bufferSize) {
 		// If the token list is empty, create a new StringBuilder and add the
@@ -190,8 +176,7 @@ public class GreeklishGenerator {
 			// when the combinations are more than one.
 		} else {
 			for (StringBuilder atoken : perWordGreeklish) {
-				for (String convertString : Arrays.copyOfRange(convertStrings,
-						1, convertStrings.length)) {
+				for (String convertString : Arrays.copyOfRange(convertStrings, 1, convertStrings.length)) {
 					if (perWordGreeklish.size() >= maxExpansions) {
 						logger.debug("Skipping for token [{}]", initialToken);
 						break;

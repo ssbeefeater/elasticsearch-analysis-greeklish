@@ -11,22 +11,22 @@ import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.apache.lucene.util.AttributeSource;
 import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.ESLoggerFactory;
+import org.elasticsearch.common.logging.Loggers;
 
 /**
- * @author Tasos Stathopoulos
- * It generates greeklish tokens(tokens with latin characters) from Greek tokens.
- * The generated tokens will have the same position and the same offset with the
- * original Greek tokens, and their type will be {@code greeklish_word}.
- * This filters acts <b>only on Greek lowercase characters</b> and for this reason
- * it should be applied after lowercase filter for Greek language.
+ * @author Tasos Stathopoulos It generates greeklish tokens(tokens with latin
+ *         characters) from Greek tokens. The generated tokens will have the
+ *         same position and the same offset with the original Greek tokens, and
+ *         their type will be {@code greeklish_word}. This filters acts <b>only
+ *         on Greek lowercase characters</b> and for this reason it should be
+ *         applied after lowercase filter for Greek language.
  */
 public class GreeklishTokenFilter extends TokenFilter {
 
 	/**
 	 * Elastic Search logger
 	 */
-	 private static final Logger logger = ESLoggerFactory.getLogger(
+	private static final Logger logger = Loggers.getLogger(Logger.class,
 			GreeklishConverter.class.getName());
 	/**
 	 * The type of the generated tokens
@@ -90,9 +90,9 @@ public class GreeklishTokenFilter extends TokenFilter {
 	}
 
 	/**
-	 * This method checks if a token can be used to generate greeklish tokens.
-	 * If it is valid, it populates the greeklish token buffer with greeklish
-	 * tokens.
+	 * This method checks if a token can be used to generate greeklish tokens. If it
+	 * is valid, it populates the greeklish token buffer with greeklish tokens.
+	 *
 	 * @return false if no tokens are generated, true elsewhere.
 	 * @throws IOException
 	 */
@@ -100,7 +100,8 @@ public class GreeklishTokenFilter extends TokenFilter {
 		// Did the converter returned any greeklish tokens
 		// If true, place the in the token buffer, or else go to the next
 		// Greek token of the token stream.
-		List<StringBuilder> greeklishTokens = greeklishConverter.convert(termAttribute.buffer(), termAttribute.length());
+		List<StringBuilder> greeklishTokens = greeklishConverter.convert(termAttribute.buffer(),
+				termAttribute.length());
 		if (greeklishTokens == null || greeklishTokens.isEmpty()) {
 			return false;
 		}
@@ -109,6 +110,5 @@ public class GreeklishTokenFilter extends TokenFilter {
 		}
 		return true;
 	}
-
 
 }

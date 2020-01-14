@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.Loggers;
 
 /**
  * @author Tasos Stathopoulos Generates singular/plural variants of a greek word
@@ -17,7 +15,6 @@ public class GreekReverseStemmer {
 	/**
 	 * Elastic Search logger
 	 */
-	private static final Logger logger = Loggers.getLogger(Logger.class, GreeklishConverter.class.getName());
 
 	/**
 	 * Constant variable that represent suffixes for pluralization of greeklish

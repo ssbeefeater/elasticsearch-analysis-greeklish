@@ -10,8 +10,6 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.apache.lucene.util.AttributeSource;
-import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.Loggers;
 
 /**
  * @author Tasos Stathopoulos It generates greeklish tokens(tokens with latin
@@ -23,11 +21,6 @@ import org.elasticsearch.common.logging.Loggers;
  */
 public class GreeklishTokenFilter extends TokenFilter {
 
-	/**
-	 * Elastic Search logger
-	 */
-	private static final Logger logger = Loggers.getLogger(Logger.class,
-			GreeklishConverter.class.getName());
 	/**
 	 * The type of the generated tokens
 	 */

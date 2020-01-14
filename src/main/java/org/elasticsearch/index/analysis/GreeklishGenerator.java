@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.Loggers;
-
 /**
  * @author Tasos Stathopoulos Generates greeklish tokens for each element of
  *         list of greek tokens.
@@ -19,7 +16,6 @@ public class GreeklishGenerator {
 	/**
 	 * Elastic Search logger
 	 */
-	private static final Logger logger = Loggers.getLogger(Logger.class, GreeklishConverter.class.getName());
 
 	/**
 	 * Constant variables that represent the character that substitutes a digraph.
@@ -164,7 +160,6 @@ public class GreeklishGenerator {
 		if (perWordGreeklish.isEmpty()) {
 			for (String convertString : convertStrings) {
 				if (perWordGreeklish.size() >= maxExpansions) {
-					logger.debug("Skipping for token [{}]", initialToken);
 					break;
 				}
 				StringBuilder greeklishWord = new StringBuilder(bufferSize);
@@ -178,7 +173,6 @@ public class GreeklishGenerator {
 			for (StringBuilder atoken : perWordGreeklish) {
 				for (String convertString : Arrays.copyOfRange(convertStrings, 1, convertStrings.length)) {
 					if (perWordGreeklish.size() >= maxExpansions) {
-						logger.debug("Skipping for token [{}]", initialToken);
 						break;
 					}
 					StringBuilder newToken = new StringBuilder(atoken);
